@@ -2,8 +2,10 @@ from django.db import models
 
 
 class Person(models.Model):
-    date_of_birth = models.DateTimeField(blank=True)
-    date_of_death = models.DateTimeField(blank=True)
+    first_name = models.CharField(max_length=100, blank=True)
+    last_name = models.CharField(max_length=100, blank=True)
+    date_of_birth = models.DateField(blank=True, null=True)
+    date_of_death = models.DateTimeField(blank=True, null=True)
     GENDER_CHOICES = (
         ('M', 'Male'),
         ('F', 'Female'),
@@ -13,36 +15,36 @@ class Person(models.Model):
     PERSON_TYPE_CHOICES = (
         ('SUS', 'Suspect'),
         ('WIT', 'Witness'),
+        ('VIC', 'Victim'),
         ('INF', 'Informant'),
         ('INT', 'Intel'),
         ('UNK', 'Unknown'),
     )
     person_type = models.CharField(max_length=3, choices=PERSON_TYPE_CHOICES, default='UNK')
-    Comment = models.TextField()
+    Comment = models.TextField(blank=True)
+
+    def __str__(self):
+        return self.first_name + " " + self.last_name.upper()
 
 
-class PersonName(models.Model):
-    person = models.ForeignKey(Person, on_delete=models.CASCADE)
-    NAME_TYPE_CHOICES = (
-        ('FN', 'First Name'),
-        ('LN', 'Last Name'),
-        ('NN', 'Nick Name'),
-        ('SN', 'Short Name'),
-        )
-    name_type = models.CharField(max_length=3, choices=NAME_TYPE_CHOICES, default='FN')
-    name = models.CharField(max_length=100, blank=True)
+class GroupType(models.Model):
+    type = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.type
+
 
 class Group(models.Model):
     group_name = models.CharField(max_length=100)
-    GROUP_TYPE_CHOICES = (
-        ('BUS', 'Business'),
-        ('NET', 'Network'),
-        ('SOC', 'Social'),
-        ('FAM', 'Family'),
-    )
-    group_type = models.CharField(max_length=3, choices=GROUP_TYPE_CHOICES)
+    group_type = models.ForeignKey(GroupType, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.group_name
 
 
 class PersonInGroup(models.Model):
     person = models.ForeignKey(Person, on_delete=models.CASCADE)
     group = models.ForeignKey(Group, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.group.group_name + " : " + self.person.first_name + " " + self.person.last_name

@@ -1,0 +1,44 @@
+{% extends 'cda/base.html' %}
+
+{% block title %}
+    CDA - Data
+{% endblock %}
+
+{% block body %}
+
+    <div class="container-fluid col-md-6">
+
+        {% if  all_persons %}
+    
+            <h4>PERSONS</h4>
+            <table class="table table-condensed">
+                <tr bgcolor="black" style="color: white">
+
+                    <th>#</th>
+                    <th>Name</th>
+                    <th style="text-align: center">Sex</th>
+                    <th>Date Of Birth</th>
+                </tr>
+
+                {% for person in all_persons %}
+                    <tr>
+                        <td>{{ person.id }}</td>
+                        <td>{{ person }}</td>
+                        <td style="text-align: center">{{ person.person_gender }}</td>
+                        <td>{{ person.date_of_birth | date:"Y-m-d"}}</td>
+                    </tr>
+                {% endfor %}
+
+            </table>
+    
+        {%  else %}
+    
+            <h3>You don't have any persons</h3>
+    
+        {% endif %}
+
+    </div>
+
+
+{% endblock %}
+

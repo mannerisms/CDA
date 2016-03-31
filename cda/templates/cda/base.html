@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>
+        {% block title %}
+            CDA
+        {% endblock %}
+    </title>
+    {% load staticfiles %}
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css">
+    <link href='https://fonts.googleapis.com/css?family=Satisfy' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="{% static "cda/style.css" %}"/>
+</head>
+<body>
+
+<nav class="navbar navbar-inverse">
+
+    <!-- Header -->
+
+    <div class="container-fluid">
+
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#topNavBar">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="{% url 'cda:index' %}">CDA</a>
+        </div>
+
+        <!-- Items -->
+        <div class="collapse navbar-collapse" id="topNavBar">
+            <ul class="nav navbar-nav">
+
+                <!-- Data -->
+                <li class="active">
+                    <a href="{% url 'cda:index' %}">
+                        <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>&nbsp;
+                        Data
+                    </a>
+                </li>
+
+                <!-- Map-->
+                <li class="">
+                    <a href="#">
+                        <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>&nbsp;
+                        Map
+                    </a>
+                </li>
+            </ul>
+
+        </div>
+
+    </div>
+</nav>
+
+{#Add new page code#}
+
+{% block body %}
+
+{% endblock %}
+
+</body>
+
+<footer>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+</footer>
+
+</html>

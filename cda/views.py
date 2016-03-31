@@ -3,5 +3,13 @@ from .models import Person
 
 
 def index(request):
+    return render(request, 'cda/index.html')
+
+
+def persons(request):
     all_persons = Person.objects.all()
-    return render(request, 'cda/index.html', {'all_persons': all_persons})
+    return render(request, 'cda/persons.html', {'all_persons': all_persons})
+
+
+def map_view(request):
+    return render(request, 'cda/map_view.html')

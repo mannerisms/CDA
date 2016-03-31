@@ -1,0 +1,49 @@
+{% extends 'cda/base.html' %}
+
+{% block title %}
+    CDA - Map
+{% endblock %}
+
+{% block body %}
+    {% load staticfiles %}
+    <link rel="stylesheet" type="text/css" href="{% static "cda/sidebar.css" %}"/>
+
+    <div id="wrapper">
+
+        <!-- Sidebar -->
+        <div id="sidebar-wrapper">
+            <ul class="sidebar-nav">
+                <li><a href="#">Calls</a></li>
+                <li><a href="#">Phones</a></li>
+                <li><a href="#">Persons</a></li>
+                <li><a href="#">Settings</a></li>
+            </ul>
+        </div>
+
+        <!-- Page Contents -->
+        <div id="page-content-wrapper">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <a href="#" class="btn btn-success" id="menu-toggle">Toggle Menu</a>
+                        <h1>Sidebar layouts are cool</h1>
+                        <p>Lorem ipsum dolor sit amet, ut dico dolorem vix, at quidam eripuit sed. Per laoreet alienum corrumpit in, sed ad falli quaestio perpetua, sea maiestatis elaboraret in. Ut iuvaret deserunt facilisis sea, adhuc accusata mei ea. Et equidem liberavisse nam, ius ex quando animal vulputate, in nec mucius democritum dissentias. Usu populo utamur epicurei ex, in nam illud nominavi.</p>
+                        <p>Lorem ipsum dolor sit amet, ut dico dolorem vix, at quidam eripuit sed. Per laoreet alienum corrumpit in, sed ad falli quaestio perpetua, sea maiestatis elaboraret in. Ut iuvaret deserunt facilisis sea, adhuc accusata mei ea. Et equidem liberavisse nam, ius ex quando animal vulputate, in nec mucius democritum dissentias. Usu populo utamur epicurei ex, in nam illud nominavi.</p>
+                        <p>Lorem ipsum dolor sit amet, ut dico dolorem vix, at quidam eripuit sed. Per laoreet alienum corrumpit in, sed ad falli quaestio perpetua, sea maiestatis elaboraret in. Ut iuvaret deserunt facilisis sea, adhuc accusata mei ea. Et equidem liberavisse nam, ius ex quando animal vulputate, in nec mucius democritum dissentias. Usu populo utamur epicurei ex, in nam illud nominavi.</p>
+                        <p>Lorem ipsum dolor sit amet, ut dico dolorem vix, at quidam eripuit sed. Per laoreet alienum corrumpit in, sed ad falli quaestio perpetua, sea maiestatis elaboraret in. Ut iuvaret deserunt facilisis sea, adhuc accusata mei ea. Et equidem liberavisse nam, ius ex quando animal vulputate, in nec mucius democritum dissentias. Usu populo utamur epicurei ex, in nam illud nominavi.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Menu toggle script -->
+    <script>
+        $("#menu-toggle").click( function (e){
+            e.preventDefault();
+            $("#wrapper").toggleClass("menuDisplayed");
+        });
+    </script>
+
+{% endblock %}
+

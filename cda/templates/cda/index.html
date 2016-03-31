@@ -1,41 +1,28 @@
 {% extends 'cda/base.html' %}
 
 {% block title %}
-    CDA - Data
+    CDA - Index
 {% endblock %}
 
 {% block body %}
 
-    <div class="container-fluid col-md-6">
+    <div class="container">
 
-        {% if  all_persons %}
-    
-            <h4>PERSONS</h4>
-            <table class="table table-condensed">
-                <tr bgcolor="black" style="color: white">
+        <h2>Wells are sections with grey backgrounds</h2>
+        <div class="well well-small">
+            Basic well
+        </div>
 
-                    <th>#</th>
-                    <th>Name</th>
-                    <th style="text-align: center">Sex</th>
-                    <th>Date Of Birth</th>
-                </tr>
+        <div class="alert alert-success">Congratulations, you just won!</div>
 
-                {% for person in all_persons %}
-                    <tr>
-                        <td>{{ person.id }}</td>
-                        <td>{{ person }}</td>
-                        <td style="text-align: center">{{ person.person_gender }}</td>
-                        <td>{{ person.date_of_birth | date:"Y-m-d"}}</td>
-                    </tr>
-                {% endfor %}
+        <div class="alert alert-info fade in">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>you just won!
+        </div>
 
-            </table>
-    
-        {%  else %}
-    
-            <h3>You don't have any persons</h3>
-    
-        {% endif %}
+        <div class="alert alert-danger fade in">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>Delete it all!
+        </div>
+
 
     </div>
 

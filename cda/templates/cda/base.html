@@ -8,8 +8,12 @@
         {% endblock %}
     </title>
     {% load staticfiles %}
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
     <link href='https://fonts.googleapis.com/css?family=Satisfy' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" type="text/css" href="{% static "cda/style.css" %}"/>
 </head>
@@ -44,6 +48,7 @@
                         Data
                         <span class="caret"></span>
                         <ul class="dropdown-menu">
+                            <li><a href="#">Scenarios</a></li>
                             <li><a href="#">Calls</a></li>
                             <li><a href="#">Phones</a></li>
                             <li><a href="{% url 'cda:persons' %}">Persons</a></li>
@@ -60,17 +65,15 @@
                 </li>
             </ul>
 
-            <!-- Right Navbar Items -->
-            <ul class="nav navbar-nav navbar-right">
-                <li><a href="#">Logout</a></li>
-            </ul>
+            {% block toggle %}
+
+            {% endblock %}
 
         </div>
     </div>
 </nav>
 
 <!-- Add new page code -->
-
 {% block body %}
 
 {% endblock %}
@@ -78,9 +81,6 @@
 </body>
 
 <footer>
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
-    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 
 </footer>
 

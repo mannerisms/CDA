@@ -1,49 +1,53 @@
-/*Sidebar*/
-#sidebar-wrapper{
-    z-index: 1;
+/* Sidebar */
+
+#sidebar-wrapper {
     position: absolute;
-    width: 0;
+    right: 0;
+    width: 400px;
     height: 100%;
-    overflow-y: hidden;
-    background: #2c3e50;
-    border: 2px solid red;
+    transform: translate(400px, 0px);
+    transition: all 0.5s;
+    background: #2C3E50;
     opacity: 0.9;
 }
 
-/*Main content*/
-#page-content-wrapper{
+/* Always take up entire screen */
+#page-content-wrapper {
     width: 100%;
     position: absolute;
-    padding: 15px;
-    border: 5px solid green;
+    transition: all 0.5s;
 }
 
-/*Change the width of the sidebar to display*/
-#wrapper.menuDisplayed #sidebar-wrapper{
-    width: 250px;
+
+/* transform the sidebar into view */
+
+#wrapper.menuDisplayed #sidebar-wrapper {
+  transform: translate(0px, 0px);
 }
 
-#wrapper.menuDisplayed #page-content-wrapper{
-    padding-left: 250px;
+/* Since we added left padding, we need to shrink the width by 250px */
+#wrapper.menuDisplayed #page-content-wrapper {
+    padding-right: 400px;
 }
 
-/*Sidebar styling*/
-.sidebar-nav{
+
+/* Sidebar styling - the entire ul list */
+.sidebar-nav {
     padding: 0;
     list-style: none;
 }
 
-.sidebar-nav li{
+.sidebar-nav li {
     text-indent: 20px;
     line-height: 40px;
 }
 
-.sidebar-nav li a{
+.sidebar-nav li a {
     display: block;
-    text-decoration: none;;
+    text-decoration: none;
     color: #ddd;
 }
 
-.sidebar-nav li:hover{
+.sidebar-nav li a:hover {
     background: #16A085;
 }

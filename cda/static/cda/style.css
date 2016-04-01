@@ -1,14 +1,22 @@
+html { overflow: hidden; }
+
+blockquote{
+    font-size:x-large;
+    font-family: 'Satisfy', serif;
+}
+
+#page-content-wrapper {
+    height:100%;
+    width:100%;
+    padding: 0;
+}
+
 .navbar{
     border-radius: 0;
     padding: 0%;
     margin: 0%;
 }
 
-.navbar-brand{
+.navbar-brand {
     font-family: 'Satisfy', cursive;
-}
-
-blockquote{
-    font-size:x-large;
-    font-family: 'Satisfy', serif;
 }

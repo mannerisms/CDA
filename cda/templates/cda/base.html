@@ -16,6 +16,11 @@
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
     <link href='https://fonts.googleapis.com/css?family=Satisfy' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" type="text/css" href="{% static "cda/style.css" %}"/>
+
+    <!-- page specific header modifications -->
+    {% block add_head %}
+    {% endblock %}
+
 </head>
 <body>
 
@@ -34,7 +39,7 @@
             </button>
 
             <!-- Navbar Branding -->
-            <a class="navbar-brand" href="{% url 'cda:index' %}">CDA</a>
+                <a class="navbar-brand" href="{% url 'cda:index' %}">CDA</a>
         </div>
 
         <div class="collapse navbar-collapse" id="topNavBar">
@@ -43,7 +48,7 @@
 
                 <!-- Date Picker -->
                 <li class="">
-                    <a href="{% url 'cda:map_view' %}">
+                    <a href="#">
                         <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>&nbsp;
                         Dates
                     </a>
@@ -52,15 +57,22 @@
                 <!-- Data Dropdown-->
                 <li class="dropdown">
                     <a href="{% url 'cda:index' %}" class="dropdown-toggle" data-toggle="dropdown">
-                        <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>&nbsp;
+                        <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>&nbsp;
                         Sources
                         <span class="caret"></span>
                         <ul class="dropdown-menu">
                             <li><a href="#">Scenarios</a></li>
-                            <li><a href="#">Calls</a></li>
                             <li><a href="#">Phones</a></li>
                             <li><a href="{% url 'cda:persons' %}">Persons</a></li>
                         </ul>
+                    </a>
+                </li>
+
+                <!-- Call Selector -->
+                <li class="">
+                    <a href="#">
+                        <span class="glyphicon glyphicon-list" aria-hidden="true"></span>&nbsp;
+                        Calls
                     </a>
                 </li>
 

@@ -5,6 +5,12 @@
     CDA - Map
 {% endblock %}
 
+{% block add_head %}
+    <!--suppress ALL -->
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
+    <script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
+{% endblock %}
+
 <!-- add toggle bottom -->
 {% block toggle %}
 <!-- Right Navbar Items -->
@@ -20,6 +26,7 @@
 
     {% load staticfiles %}
     <link rel="stylesheet" type="text/css" href="{% static "cda/sidebar.css" %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static "cda/map.css" %}"/>
     <div id="wrapper">
 
         <!-- Sidebar -->
@@ -36,11 +43,10 @@
         <div id="page-content-wrapper">
             <div class="container-fluid">
                 <div class="col-lg-12">
-                    <h1>Sidebar layouts are cool</h1>
-                    <p>Lorem ipsum dolor sit amet, ut dico dolorem vix, at quidam eripuit sed. Per laoreet alienum corrumpit in, sed ad falli quaestio perpetua, sea maiestatis elaboraret in. Ut iuvaret deserunt facilisis sea, adhuc accusata mei ea. Et equidem liberavisse nam, ius ex quando animal vulputate, in nec mucius democritum dissentias. Usu populo utamur epicurei ex, in nam illud nominavi.</p>
-                    <p>Lorem ipsum dolor sit amet, ut dico dolorem vix, at quidam eripuit sed. Per laoreet alienum corrumpit in, sed ad falli quaestio perpetua, sea maiestatis elaboraret in. Ut iuvaret deserunt facilisis sea, adhuc accusata mei ea. Et equidem liberavisse nam, ius ex quando animal vulputate, in nec mucius democritum dissentias. Usu populo utamur epicurei ex, in nam illud nominavi.</p>
-                    <p>Lorem ipsum dolor sit amet, ut dico dolorem vix, at quidam eripuit sed. Per laoreet alienum corrumpit in, sed ad falli quaestio perpetua, sea maiestatis elaboraret in. Ut iuvaret deserunt facilisis sea, adhuc accusata mei ea. Et equidem liberavisse nam, ius ex quando animal vulputate, in nec mucius democritum dissentias. Usu populo utamur epicurei ex, in nam illud nominavi.</p>
-                    <p>Lorem ipsum dolor sit amet, ut dico dolorem vix, at quidam eripuit sed. Per laoreet alienum corrumpit in, sed ad falli quaestio perpetua, sea maiestatis elaboraret in. Ut iuvaret deserunt facilisis sea, adhuc accusata mei ea. Et equidem liberavisse nam, ius ex quando animal vulputate, in nec mucius democritum dissentias. Usu populo utamur epicurei ex, in nam illud nominavi.</p>
+                    <!-- Setup Map -->
+                    <div id="mapid">
+
+                    </div>
                 </div>
             </div>
         </div>
@@ -54,6 +60,35 @@
             $("#wrapper").toggleClass("menuDisplayed");
         });
     </script>
+
+    <script>
+
+        <!-- Setup the BaseMap -->
+        var mymap = L.map('mapid').setView([33.885, 35.5061], 14);
+
+            <!-- Load the mapTiles from mapbox -->
+            L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+                attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
+                '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+                'Imagery © <a href="http://mapbox.com">Mapbox</a>',
+                maxZoom: 18,
+                id: 'mannerisms.pigb1922',
+                accessToken: 'pk.eyJ1IjoibWFubmVyaXNtcyIsImEiOiJjaW1obnE4azUwMDBtdnZtMnFicHVwN3lpIn0.e0CXD69_JWWW-pkNfG62Dg'
+            }).addTo(mymap);
+
+        <!-- Popup for location when clicked -->
+        var popup = L.popup();
+
+        <!-- Create a small circle to act as a mast -->
+        var mast = L.circleMarker([33.885, 35.5061],{
+            stroke: false,
+            fillColor: '#ff0000',
+            fillOpacity: .75,
+        }).setRadius(6).addTo(mymap);
+        mast.bindPopup("<b>Cell_Name: </b><br>15:10:23 - Mary <b>EXAMPLES</b>");
+
+    </script>
+
 
 {% endblock %}
 

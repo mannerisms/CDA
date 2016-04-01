@@ -22,7 +22,7 @@
 /* transform the sidebar into view */
 
 #wrapper.menuDisplayed #sidebar-wrapper {
-  transform: translate(0px, 0px);
+    transform: translate(0px, 0px);
 }
 
 /* Since we added left padding, we need to shrink the width by 250px */

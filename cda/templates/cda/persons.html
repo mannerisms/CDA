@@ -4,30 +4,42 @@
     CDA - Data
 {% endblock %}
 
+{% block add_head %}
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.11/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/select/1.1.2/css/select.dataTables.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+
+{% endblock %}
+
+
 {% block body %}
 
     <div class="container-fluid col-md-6">
 
         {% if  all_persons %}
 
-            <table class="table table-condensed">
-                <tr bgcolor="black" style="color: white">
+            <table id="person-table" class="table table-condensed table-hover" cellspacing="0" width="100%">
+                <thead>
+                    <tr bgcolor="black" style="color: white">
 
-                    <th>#</th>
-                    <th>Name</th>
-                    <th style="text-align: center">Sex</th>
-                    <th>Date Of Birth</th>
-                </tr>
-
-                {% for person in all_persons %}
-                    <tr>
-                        <td>{{ person.id }}</td>
-                        <td>{{ person }}</td>
-                        <td style="text-align: center">{{ person.person_gender }}</td>
-                        <td>{{ person.date_of_birth | date:"Y-m-d"}}</td>
+                        <th><input name="select_all" value="1" id="person-select-all" type="checkbox" align="center"></th>
+                        <th>Name</th>
+                        <th>Type</th>
+                        <th>Date Of Birth</th>
                     </tr>
-                {% endfor %}
+                </thead>
 
+                <tbody class="searchable">
+                    {% for person in all_persons %}
+                        <tr>
+                            <td></td>
+                            <td>{{ person }}</td>
+                            <td>{{ person.person_type }}</td>
+                            <td>{{ person.date_of_birth | date:"Y-m-d"}}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
             </table>
     
         {%  else %}
@@ -36,8 +48,56 @@
     
         {% endif %}
 
+
+        <!-- Table script -->
+        <script>
+            $(document).ready(function() {
+                var table = $('#person-table').DataTable( {
+                        scrollY:        '75vh',
+                        scrollCollapse: true,
+                        paging:         false,
+                        columnDefs: [{
+                             'targets': 0,
+                             'searchable': false,
+                             'orderable': false,
+                             'className': 'dt-body-center',
+                             'render': function (data, type, full, meta){
+                                 return '<input type="checkbox" name="id[]" value="' + $('<div/>').text(data).html() + '">';
+                             }
+                        }],
+                        order: [[ 1, 'asc' ]]
+                });
+
+                // Handle click on "Select all" control
+               $('#person-select-all').on('click', function(){
+                  // Get all rows with search applied
+                  var rows = table.rows({ 'search': 'applied' }).nodes();
+                  // Check/uncheck checkboxes for all rows in the table
+                  $('input[type="checkbox"]', rows).prop('checked', this.checked);
+               });
+
+               // Handle click on checkbox to set state of "Select all" control
+               $('#person-table.searchable').on('change', 'input[type="checkbox"]', function(){
+                  // If checkbox is not checked
+                  if(!this.checked){
+                     var el = $('#person-select-all').get(0);
+                     // If "Select all" control is checked and has 'indeterminate' property
+                     if(el && el.checked && ('indeterminate' in el)){
+                        // Set visual state of "Select all" control
+                        // as 'indeterminate'
+                        el.indeterminate = true;
+                     }
+                  }
+               });
+            } );
+        </script>
     </div>
 
 
 {% endblock %}
 
+{% block add_foot %}
+    <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/select/1.1.2/js/dataTables.select.min.js"></script>
+{% endblock %}

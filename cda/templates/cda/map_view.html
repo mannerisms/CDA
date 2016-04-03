@@ -6,8 +6,15 @@
 {% endblock %}
 
 {% block add_head %}
+
+    {% load staticfiles %}
+
     <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
     <script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="{% static "cda/sidebar.css" %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static "cda/map.css" %}"/>
+
 {% endblock %}
 
 <!-- add toggle bottom -->
@@ -23,9 +30,6 @@
 
 {% block body %}
 
-    {% load staticfiles %}
-    <link rel="stylesheet" type="text/css" href="{% static "cda/sidebar.css" %}"/>
-    <link rel="stylesheet" type="text/css" href="{% static "cda/map.css" %}"/>
     <div id="wrapper">
 
         <!-- Sidebar -->

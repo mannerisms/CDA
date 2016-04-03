@@ -24,7 +24,7 @@ class Person(models.Model):
     Comment = models.TextField(blank=True)
 
     def __str__(self):
-        return self.first_name + " " + self.last_name.upper()
+        return self.last_name.upper() + ", " + self.first_name
 
 
 class GroupType(models.Model):

@@ -7,7 +7,7 @@ def index(request):
 
 
 def persons(request):
-    all_persons = Person.objects.all()
+    all_persons = Person.objects.all().order_by('last_name', 'first_name')
     return render(request, 'cda/persons.html', {'all_persons': all_persons})
 
 

@@ -1,37 +1,50 @@
 <div class="row">
     <div class="col-md-12">
-      <div class="panel panel-default">
-        <div class="panel-body">
-          <div class="row">
-            <div class="col-md-12 lead"><b>PROFILE</b><hr></div>
-          </div>
-          <div class="row">
-            <div class="col-md-4 text-center">
-              <img class="img-circle avatar avatar-original" style="-webkit-user-select:none;
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-12 lead"><b>PROFILE</b>
+                        <hr>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <img class="img-circle avatar avatar-original" style="-webkit-user-select:none;
               display:block; margin:auto;" src="http://robohash.org/sitsequiquia.png?size=120x120">
-            </div>
-            <div class="col-md-8">
-              <div class="row">
-                <div class="col-md-12">
-                  <h1 class="only-bottom-margin">{{ person }}</h1>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-md-12">
-                  <span class="text-muted">Birth date: </span>{{ person.date_of_birth }}<br>
-                  <span class="text-muted">Gender: </span> {{ person.person_gender }}<br><br>
-                  <span class="text-muted">Detail: </span>{{ person.Comment }}<br><br>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h1 class="only-bottom-margin">{{ person }}</h1>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <span class="text-muted">Birth date: </span>{{ person.date_of_birth }}<br>
+                                <span class="text-muted">Gender: </span> {{ person.person_gender }}<br><br>
+                                <span class="text-muted">Detail: </span>{{ person.Comment }}<br><br>
 
+                            </div>
+                        </div>
+                    </div>
                 </div>
-              </div>
+                <div class="row" align="right">
+                    <div class="col-md-12">
+                        <hr>
+                        <!-- Edit -->
+                        <form action="{% url 'cda:person-update' person.id %}" method="get">
+                            {% csrf_token %}
+                            <button class="btn btn-default pull-right"><i class="glyphicon glyphicon-pencil"></i> Edit
+                            </button>
+                        </form>
+                        <form action="{% url 'cda:person-delete' person.id %}" method="post">
+                            {% csrf_token %}
+                            <button class="btn btn-warning align-right"><i class="glyphicon glyphicon-pencil"></i> Edit
+                            </button>
+                        </form>
+                    </div>
+                </div>
             </div>
-          </div>
-          <div class="row">
-            <div class="col-md-12">
-              <hr><button class="btn btn-default pull-right"><i class="glyphicon glyphicon-pencil"></i> Edit</button>
-            </div>
-          </div>
         </div>
-      </div>
     </div>
 </div>

@@ -1,9 +1,10 @@
 from django.shortcuts import render, get_object_or_404
-from django.views import generic
+from django.core.urlresolvers import reverse_lazy
+from django.views.generic import CreateView, DetailView, ListView, UpdateView, DeleteView
 from .models import Person
 
 
-class PersonList(generic.ListView):
+class PersonList(ListView):
     template_name = 'cda/persons.html'
     context_object_name = 'all_persons'
 
@@ -11,19 +12,25 @@ class PersonList(generic.ListView):
         return Person.objects.all()
 
 
-class PersonProfile(generic.DetailView):
+class PersonProfile(DetailView):
     model = Person
     template_name = 'cda/person_profile.html'
 
 
-class PersonProfileInline(generic.DetailView):
-    model = Person
-    template_name = 'cda/person_profile.html'
-
-
-class PersonCreate(generic.CreateView):
+class PersonCreate(CreateView):
     model = Person
     fields = ['first_name', 'last_name', 'date_of_birth', 'date_of_death', 'person_gender', 'person_type', 'Comment']
+
+
+class PersonUpdate(UpdateView):
+    model = Person
+    fields = ['first_name', 'last_name', 'date_of_birth', 'date_of_death', 'person_gender', 'person_type', 'Comment']
+
+
+class PersonDelete(DeleteView):
+    model = Person
+    success_url = reverse_lazy('cda:persons')
+
 
 
 def index(request):

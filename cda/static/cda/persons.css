@@ -1,12 +1,20 @@
- .navbar {
-     border-radius: 0;
- }
+.navbar {
+    border-radius: 0;
+}
 
- th {
-     background-color: black;
-     color: white;
- }
+th {
+    background-color: black;
+    color: white;
+}
 
- #person_profile_container {
-     padding-top: 30px;
- }
+#person_profile_container {
+    padding-top: 30px;
+}
+
+.container {
+    background-color: inherit;
+}
+
+body {
+    background-color: #e6e6e6;
+}

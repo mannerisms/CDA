@@ -15,6 +15,17 @@
 
 {% endblock %}
 
+<!-- add add Person -->
+{% block toggle %}
+<!-- Right Navbar Items -->
+<ul class="nav navbar-nav navbar-right">
+    <li><a href="{% url 'cda:person-add'%}" id="menu-toggle">
+        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp;
+        New Person
+    </a></li>
+</ul>
+{% endblock %}
+
 
 {% block content %}
 
@@ -79,7 +90,7 @@
                     else {
                         table.$('tr.selected').removeClass('selected');
                         $(this).addClass('selected');
-                        var loadstring = "{% url 'cda:persons' %}" + id
+                        var loadstring = "{% url 'cda:persons' %}" + id + "/";
                         $("div#person_profile_container").load(loadstring);
                     }
 

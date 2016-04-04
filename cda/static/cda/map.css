@@ -6,10 +6,16 @@ html {
     height: 100%;
 }
 
+#page-content-wrapper {
+    height:100%;
+    width:100%;
+    padding: 0;
+}
+
 .container-fluid {
     height:100%;
     width:100%;
-    padding:0;
+    padding:0px;
 }
 
 .col-lg-12 {

@@ -1,4 +1,6 @@
 from django.db import models
+from django.core.urlresolvers import reverse
+from django.http import HttpResponseRedirect
 
 
 class Person(models.Model):
@@ -22,6 +24,9 @@ class Person(models.Model):
     )
     person_type = models.CharField(max_length=3, choices=PERSON_TYPE_CHOICES, default='UNK')
     Comment = models.TextField(blank=True)
+
+    def get_absolute_url(self):
+        return reverse('cda:persons')
 
     def __str__(self):
         return self.last_name.upper() + ", " + self.first_name

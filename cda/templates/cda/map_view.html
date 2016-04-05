@@ -35,10 +35,9 @@
         <!-- Sidebar -->
         <div id="sidebar-wrapper">
             <ul class="sidebar-nav">
-                <li><a href="#">Calls</a></li>
-                <li><a href="#">Phones</a></li>
-                <li><a href="#">Persons</a></li>
-                <li><a href="#">Settings</a></li>
+                {% for mast in all_masts %}
+                    <li><a href="#">{{ mast.name }}</a></li>
+                {% endfor %}
             </ul>
         </div>
 
@@ -106,16 +105,17 @@
             {% endfor %}
         ];
 
+        // Set options for points
         var geojsonMarkerOptions = {
             radius: 6,
-            fillColor: "#ff0000",
+            fillColor: "#000000",
             color: "#000",
             weight: 0,
             opacity: 1,
             fillOpacity: 0.8
         };
 
-        // Set styling for points
+        // Setup Points and add to map
         L.geoJson(cellMasts,{
 
             // Add popups to features

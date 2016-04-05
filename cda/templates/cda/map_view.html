@@ -9,7 +9,7 @@
 
     {% load staticfiles %}
 
-    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css"/>
     <script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
 
     <link rel="stylesheet" type="text/css" href="{% static "cda/sidebar.css" %}"/>
@@ -19,12 +19,12 @@
 
 <!-- add toggle bottom -->
 {% block toggle %}
-<!-- Right Navbar Items -->
-<ul class="nav navbar-nav navbar-right">
-    <li><a href="#" id="menu-toggle">
-        <span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span>&nbsp;
-    </a></li>
-</ul>
+    <!-- Right Navbar Items -->
+    <ul class="nav navbar-nav navbar-right">
+        <li><a href="#" id="menu-toggle">
+            <span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span>&nbsp;
+        </a></li>
+    </ul>
 {% endblock %}
 
 
@@ -58,7 +58,7 @@
 
     <!-- Menu toggle script -->
     <script>
-        $("#menu-toggle").click( function (e){
+        $("#menu-toggle").click(function (e) {
             e.preventDefault();
             $("#wrapper").toggleClass("menuDisplayed");
         });
@@ -66,29 +66,66 @@
 
     <script>
 
-        <!-- Setup the BaseMap -->
-        var mymap = L.map('mapid').setView([33.885, 35.5061], 14);
+        // Configure BaseMap
+        var map = L.map('mapid').setView([33.885, 35.5061], 14);
 
-            <!-- Load the mapTiles from mapbox -->
-            L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
-                attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
-                '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-                'Imagery © <a href="http://mapbox.com">Mapbox</a>',
-                maxZoom: 18,
-                id: 'mannerisms.pigb1922',
-                accessToken: 'pk.eyJ1IjoibWFubmVyaXNtcyIsImEiOiJjaW1obnE4azUwMDBtdnZtMnFicHVwN3lpIn0.e0CXD69_JWWW-pkNfG62Dg'
-            }).addTo(mymap);
+        // Load the mapTiles from mapbox
+        L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+            attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
+            '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+            'Imagery © <a href="http://mapbox.com">Mapbox</a>',
+            maxZoom: 18,
+            id: 'mannerisms.pigb1922',
+            accessToken: 'pk.eyJ1IjoibWFubmVyaXNtcyIsImEiOiJjaW1obnE4azUwMDBtdnZtMnFicHVwN3lpIn0.e0CXD69_JWWW-pkNfG62Dg'
+        }).addTo(map);
 
-        <!-- Popup for location when clicked -->
-        var popup = L.popup();
 
-        <!-- Create a small circle to act as a mast -->
-        var mast = L.circleMarker([33.885, 35.5061],{
-            stroke: false,
-            fillColor: '#ff0000',
-            fillOpacity: .75,
-        }).setRadius(6).addTo(mymap);
-        mast.bindPopup("<b>Cell_Name: </b><br>15:10:23 - Mary <b>EXAMPLES</b>");
+        // Function enabling popups for features
+        function onEachFeature(feature, layer) {
+            // does this feature have a property named popupContent?
+            if (feature.properties && feature.properties.popupContent) {
+                layer.bindPopup(feature.properties.popupContent);
+            }
+        }
+
+        // Create List of all mast features
+        var cellMasts = [
+            {% for mast in all_masts %}
+                {
+                    "type": "Feature",
+                    "properties": {
+                        "name": "{{ mast.name }}",
+                        "amenity": "Cell mast",
+                        "popupContent": "<b>{{ mast.name }}</b>"
+                    },
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [{{ mast.long }}, {{ mast.lat }}]
+                    }
+                },
+            {% endfor %}
+        ];
+
+        var geojsonMarkerOptions = {
+            radius: 6,
+            fillColor: "#ff0000",
+            color: "#000",
+            weight: 0,
+            opacity: 1,
+            fillOpacity: 0.8
+        };
+
+        // Set styling for points
+        L.geoJson(cellMasts,{
+
+            // Add popups to features
+            onEachFeature: onEachFeature,
+
+            // Add styling to poings
+            pointToLayer: function (feature, latlng) {
+                return L.circleMarker(latlng, geojsonMarkerOptions)
+            }
+        }).addTo(map);
 
     </script>
 

@@ -22,7 +22,6 @@ urlpatterns = [
     # /cda/sources/persons/#/delete/
     url(r'^sources/persons/(?P<pk>[0-9]+)/delete/$', views.PersonDelete.as_view(), name='person-delete'),
 
-
     # /cda/map/
-    url(r'^map/$', views.map_view, name='map_view'),
+    url(r'^map/$', views.MapView.as_view(), name='map_view'),
 ]

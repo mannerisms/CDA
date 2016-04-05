@@ -1,10 +1,41 @@
 from django.db import models
 from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect
+
+
+class Source(models.Model):
+    document = models.FileField()
+    reference = models.CharField(max_length=100)
+    TYPE_CHOICES = (
+        ('WS', 'Witness Statement'),
+        ('SS', 'Suspect Statement'),
+        ('RP', 'Report'),
+        ('IN', 'Investigators note'),
+        ('UN', 'Unknown'),
+    )
+    type = models.CharField(max_length=3, choices=TYPE_CHOICES, default='EN')
+    title = models.CharField(max_length=256)
+    src_date = models.DateField(blank=True)
+    LANGUAGE_CHOICES = (
+        ('EN', 'English'),
+        ('FR', 'French'),
+        ('AR', 'Arabic'),
+        ('SP', 'Spanish'),
+        ('DT', 'Dutch'),
+        ('NA', 'Unknown'),
+    )
+    language = models.CharField(max_length=2, choices=LANGUAGE_CHOICES, default='EN')
+    description = models.TextField(blank=True)
+    comment = models.TextField(blank=True)
+    verified = models.BooleanField(default=False)
+    date_modified = models.DateField(auto_now=True)
+    date_created = models.DateField(auto_now_add=True)
+
+    def __str__(self):
+        return self.reference + "  :  " + self.title
 
 
 class Person(models.Model):
-    first_name = models.CharField(max_length=100, blank=True)
+    first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100, blank=True)
     date_of_birth = models.DateField(blank=True, null=True)
     date_of_death = models.DateTimeField(blank=True, null=True)
@@ -23,7 +54,9 @@ class Person(models.Model):
         ('UNK', 'Unknown'),
     )
     person_type = models.CharField(max_length=3, choices=PERSON_TYPE_CHOICES, default='UNK')
-    Comment = models.TextField(blank=True)
+    comment = models.TextField(blank=True)
+    source = models.ManyToManyField(Source, blank=True)
+    image = models.FileField(blank=True)
 
     def get_absolute_url(self):
         return reverse('cda:persons')
@@ -32,24 +65,15 @@ class Person(models.Model):
         return self.last_name.upper() + ", " + self.first_name
 
 
-class GroupType(models.Model):
-    type = models.CharField(max_length=100)
+class CellMast(models.Model):
+    code = models.CharField(max_length=6)
+    name = models.CharField(max_length=64)
+    long = models.DecimalField(max_digits=9, decimal_places=6)
+    lat = models.DecimalField(max_digits=9, decimal_places=6)
+    comment = models.TextField(blank=True)
+    source = models.ForeignKey(Source)
+    date_modified = models.DateField(auto_now=True)
+    date_created = models.DateField(auto_now_add=True)
 
     def __str__(self):
-        return self.type
-
-
-class Group(models.Model):
-    group_name = models.CharField(max_length=100)
-    group_type = models.ForeignKey(GroupType, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return self.group_name
-
-
-class PersonInGroup(models.Model):
-    person = models.ForeignKey(Person, on_delete=models.CASCADE)
-    group = models.ForeignKey(Group, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return self.group.group_name + " : " + self.person.first_name + " " + self.person.last_name
+        return self.code + "  :  " + self.name

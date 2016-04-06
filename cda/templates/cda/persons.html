@@ -6,10 +6,6 @@
 
 {% block add_head %}
 
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.11/css/jquery.dataTables.min.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/select/1.1.2/css/select.dataTables.min.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-
     {% load staticfiles %}
     <link rel="stylesheet" type="text/css" href="{% static "cda/persons.css" %}"/>
 
@@ -17,117 +13,116 @@
 
 <!-- add add Person -->
 {% block toggle %}
-<!-- Right Navbar Items -->
-<ul class="nav navbar-nav navbar-right">
-    <li><a href="{% url 'cda:person-add'%}" id="menu-toggle">
-        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp;
-        New Person
-    </a></li>
-</ul>
+    <!-- Right Navbar Items -->
+    <ul class="nav navbar-nav navbar-right">
+        <li><a href="{% url 'cda:person-add' %}" id="menu-toggle">
+            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp;
+            New Person
+        </a></li>
+    </ul>
 {% endblock %}
 
 
 {% block content %}
 
-    <div id="person_table_container" class="container-fluid col-md-6">
+    <div id="content-container" class="container-fluid">
 
-        {% if  all_persons %}
+        <div id="person_table_container" class="container-fluid col-md-6">
 
-            <table id="person-table" class="table table-condensed table-hover" cellspacing="0" width="100%">
-                <thead>
+            {% if  all_persons %}
+
+                <table id="person-table" class="table table-striped table-bordered table-hover" cellspacing="0"
+                       width="100%">
+                    <thead>
                     <tr>
-                        <th><input name="select_all" value="1" id="person-select-all" type="checkbox"></th>
+                        <th id="check-column"><input name="select_all" value="1" id="person-select-all" type="checkbox"></th>
                         <th>Name</th>
                         <th>Type</th>
                         <th>Date Of Birth</th>
                     </tr>
-                </thead>
+                    </thead>
 
-                <tbody class="searchable">
+                    <tbody class="searchable">
                     {% for person in all_persons %}
                         <tr id="{{ person.id }}">
-                            <td></td>
-                            <td>{{ person }}</a></td>
-                            <td>{{ person.person_type }}</td>
-                            <td>{{ person.date_of_birth | date:"Y-m-d"}}</td>
+                            <td id="check-column"></td>
+                            <td>{{ person }}</td>
+                            <td>{{ person.get_person_type_display }}</td>
+                            <td>{{ person.date_of_birth | date:"Y-m-d" }}</td>
                         </tr>
                     {% endfor %}
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
 
-        {%  else %}
+            {% else %}
 
-            <h3>You don't have any persons</h3>
+                <h3>You don't have any persons</h3>
 
-        {% endif %}
+            {% endif %}
 
+        </div>
 
-        <!-- Table script -->
-        <script>
-            $(document).ready(function() {
-                var table = $('#person-table').DataTable( {
-                        dom: '<"pull-left"f><"pull-right"l>tip',
-                        scrollY: '75vh',
-                        scrollCollapse: true,
-                        paging: false,
-                        columnDefs: [{
-                             'targets': 0,
-                             'searchable': false,
-                             'orderable': false,
-                             'className': 'dt-body-center',
-                             'render': function (data, type, full, meta){
-                                 return '<input type="checkbox" name="id[]" value="' + $('<div/>').text(data).html() + '">';
-                             }
-                        }],
-                        order: [[ 1, 'asc' ]]
-                });
+        <!-- Area for Person Profile Container -->
+        <div id="person_profile_container" class="container-fluid col-md-6"></div>
 
-                $('#person-table tbody').on( 'click', 'tr', function () {
-                    var id = table.row( this ).id();
-                    if ( $(this).hasClass('selected') ) {
-                        $(this).removeClass('selected');
+    </div>
+
+    <!-- Table script -->
+    <script>
+        $(document).ready(function () {
+            var table = $('#person-table').DataTable({
+                dom: '<"pull-left"f><"pull-right"l>tip',
+                scrollY: '75vh',
+                scrollCollapse: true,
+                paging: false,
+                columnDefs: [{
+                    'targets': 0,
+                    'searchable': false,
+                    'orderable': false,
+                    'className': 'dt-body-center',
+                    'render': function (data, type, full, meta) {
+                        return '<input type="checkbox" name="id[]" value="' + $('<div/>').text(data).html() + '">';
                     }
-                    else {
-                        table.$('tr.selected').removeClass('selected');
-                        $(this).addClass('selected');
-                        var loadstring = "{% url 'cda:persons' %}" + id + "/";
-                        $("div#person_profile_container").load(loadstring);
-                    }
+                }],
+                order: [[1, 'asc']]
+            });
 
-                } );
+            $('#person-table tbody').on('click', 'tr', function () {
+                var id = table.row(this).id();
+                if ($(this).hasClass('selected')) {
+                    $(this).removeClass('selected');
+                }
+                else {
+                    table.$('tr.selected').removeClass('selected');
+                    $(this).addClass('selected');
+                    var loadstring = "{% url 'cda:persons' %}" + id + "/";
+                    $("div#person_profile_container").load(loadstring);
+                }
 
-                // Handle click on "Select all" control
-               $('#person-select-all').on('click', function(){
-                  // Get all rows with search applied
-                  var rows = table.rows({ 'search': 'applied' }).nodes();
-                  // Check/uncheck checkboxes for all rows in the table
-                  $('input[type="checkbox"]', rows).prop('checked', this.checked);
-               });
+            });
 
-               // Handle click on checkbox to set state of "Select all" control
-               $('#person-table.searchable').on('change', 'input[type="checkbox"]', function(){
-                  // If checkbox is not checked
-                  if(!this.checked){
-                     var el = $('#person-select-all').get(0);
-                     // If "Select all" control is checked and has 'indeterminate' property
-                     if(el && el.checked && ('indeterminate' in el)){
+            // Handle click on "Select all" control
+            $('#person-select-all').on('click', function () {
+                // Get all rows with search applied
+                var rows = table.rows({'search': 'applied'}).nodes();
+                // Check/uncheck checkboxes for all rows in the table
+                $('input[type="checkbox"]', rows).prop('checked', this.checked);
+            });
+
+            // Handle click on checkbox to set state of "Select all" control
+            $('#person-table.searchable').on('change', 'input[type="checkbox"]', function () {
+                // If checkbox is not checked
+                if (!this.checked) {
+                    var el = $('#person-select-all').get(0);
+                    // If "Select all" control is checked and has 'indeterminate' property
+                    if (el && el.checked && ('indeterminate' in el)) {
                         // Set visual state of "Select all" control
                         // as 'indeterminate'
                         el.indeterminate = true;
-                     }
-                  }
-               });
-            } );
-        </script>
-    </div>
+                    }
+                }
+            });
+        });
+    </script>
 
-    <!-- Area for Person Profile Container -->
-    <div id="person_profile_container" class="container-fluid col-md-6"></div>
-
-{% endblock %}
-
-{% block add_foot %}
-    <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
-    <script src="https://cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/select/1.1.2/js/dataTables.select.min.js"></script>
 {% endblock %}

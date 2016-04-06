@@ -1,5 +1,18 @@
 /* Sidebar */
 
+#sidebar-table {
+    margin-top: 0;
+    background-color: white;
+}
+
+table.dataTable {
+    margin-top: 0 !important;
+}
+
+.table-hover > tbody > tr:hover {
+  background-color: #D2D2D2;
+}
+
 #sidebar-wrapper {
     position: absolute;
     right: 0;
@@ -7,20 +20,21 @@
     height: 100%;
     transform: translate(400px, 0px);
     transition: all 0.5s;
-    background: #2C3E50;
+    background: darkgray;
     opacity: 0.9;
+    padding: 0;
 }
 
 /* Always take up entire screen */
 #page-content-wrapper {
+    height: 100%;
     width: 100%;
+    padding: 0;
     position: absolute;
     transition: all 0.5s;
 }
 
-
 /* transform the sidebar into view */
-
 #wrapper.menuDisplayed #sidebar-wrapper {
     transform: translate(0px, 0px);
 }
@@ -30,24 +44,12 @@
     padding-right: 400px;
 }
 
-
-/* Sidebar styling - the entire ul list */
-.sidebar-nav {
-    padding: 0;
-    list-style: none;
+/*Set counter for first row*/
+.css-serial {
+    counter-reset: serial-number; /* Set the serial number counter to 0 */
 }
 
-.sidebar-nav li {
-    text-indent: 20px;
-    line-height: 40px;
-}
-
-.sidebar-nav li a {
-    display: block;
-    text-decoration: none;
-    color: #ddd;
-}
-
-.sidebar-nav li a:hover {
-    background: #16A085;
+.css-serial td:first-child:before {
+    counter-increment: serial-number; /* Increment the serial number counter */
+    content: counter(serial-number); /* Display the counter */
 }

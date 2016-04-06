@@ -6,24 +6,14 @@ html {
     height: 100%;
 }
 
-#page-content-wrapper {
-    height:100%;
-    width:100%;
-    padding: 0;
-}
-
-.container-fluid {
+#map_container {
     height:100%;
     width:100%;
     padding:0px;
 }
 
-.col-lg-12 {
+#map_col {
     height:100%;
     width:100%;
     padding: 0;
-}
-
-a.navbar-brand {
-    padding-left: 30px;
 }

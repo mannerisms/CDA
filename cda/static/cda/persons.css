@@ -8,15 +8,15 @@ th {
 }
 
 #person_profile_container {
-    padding-top: 30px;
+    padding-top: 40px;
 }
 
 .container {
     background-color: inherit;
 }
 
-body {
-    background-color: #e6e6e6;
+#content-container {
+    padding-top: 15px;
 }
 
 #image_display {
@@ -25,4 +25,8 @@ body {
     display: block;
     wi: 120px;
     height: 120px;
+}
+
+#check-column {
+    align-items: center;
 }

@@ -12,8 +12,8 @@
     <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css"/>
     <script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
 
-    <link rel="stylesheet" type="text/css" href="{% static "cda/sidebar.css" %}"/>
     <link rel="stylesheet" type="text/css" href="{% static "cda/map.css" %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static "cda/sidebar.css" %}"/>
 
 {% endblock %}
 
@@ -31,39 +31,75 @@
 {% block content %}
 
     <div id="wrapper">
-
         <!-- Sidebar -->
-        <div id="sidebar-wrapper">
-            <ul class="sidebar-nav">
-                {% for mast in all_masts %}
-                    <li><a href="#">{{ mast.name }}</a></li>
-                {% endfor %}
-            </ul>
+        <div id="sidebar-wrapper" class="container-fluid">
+{#            <table id="sidebar-table" class="css-serial hover table table-condensed table-striped table-bordered">#}
+            <table id="sidebar-table" class="table table-hover table-striped table-bordered css-serial" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Time</th>
+                        <th>Outgoing</th>
+                        <th>Incoming</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for mast in all_masts %}
+                        <tr>
+                            <td></td>
+                            <td>##:##:##</td>
+                            <td>{{ mast.name }}</td>
+                            <td>{{ mast.name }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
 
         <!-- Page Contents -->
         <div id="page-content-wrapper">
-            <div class="container-fluid">
-                <div class="col-lg-12">
+            <div id="map_container" class="container-fluid">
+                <div id="map_col" class="col-lg-12">
                     <!-- Setup Map -->
-                    <div id="mapid">
-
-                    </div>
+                    <div id="mapid"></div>
                 </div>
             </div>
         </div>
 
     </div>
 
-    <!-- Menu toggle script -->
     <script>
+
+        // Menu toggle script
         $("#menu-toggle").click(function (e) {
             e.preventDefault();
             $("#wrapper").toggleClass("menuDisplayed");
         });
-    </script>
 
-    <script>
+        // Sidebar JS
+        $(document).ready(function () {
+
+            var table = $('#sidebar-table').DataTable({
+                "select": true,
+                "bPaginate": false,
+                "bInfo": false,
+                "bSort": false,
+                "bFilter": false,
+                "bScrollCollapse": true
+            });
+
+            $('#sidebar-table tbody').on( 'click', 'tr', function () {
+                if ( $(this).hasClass('selected') ) {
+                    $(this).removeClass('selected');
+                }
+                else {
+                    table.$('tr.selected').removeClass('selected');
+                    $(this).addClass('selected');
+                }
+            });
+
+        });
 
         // Configure BaseMap
         var map = L.map('mapid').setView([33.885, 35.5061], 14);
@@ -95,7 +131,8 @@
                     "properties": {
                         "name": "{{ mast.name }}",
                         "amenity": "Cell mast",
-                        "popupContent": "<b>{{ mast.name }}</b>"
+                        "popupContent": "<b>{{ mast.name }}</b>",
+                        "show_on_map": true
                     },
                     "geometry": {
                         "type": "Point",
@@ -116,10 +153,15 @@
         };
 
         // Setup Points and add to map
-        L.geoJson(cellMasts,{
+        L.geoJson(cellMasts, {
 
             // Add popups to features
             onEachFeature: onEachFeature,
+
+            // Filter masts for show on map
+            filter: function (feature, layer) {
+                return feature.properties.show_on_map;
+            },
 
             // Add styling to poings
             pointToLayer: function (feature, latlng) {
@@ -128,7 +170,6 @@
         }).addTo(map);
 
     </script>
-
 
 {% endblock %}
 

@@ -3,6 +3,7 @@
 #sidebar-table {
     margin-top: 0;
     background-color: white;
+    display: none;
 }
 
 table.dataTable {
@@ -15,14 +16,12 @@ table.dataTable {
 
 #sidebar-wrapper {
     position: absolute;
-    right: 0;
+    right: 0px;
     width: 400px;
     height: 100%;
-    transform: translate(400px, 0px);
-    transition: all 0.5s;
-    background: darkgray;
-    opacity: 0.9;
+    opacity: 0.7;
     padding: 0;
+    background-color: #ddd;
 }
 
 /* Always take up entire screen */

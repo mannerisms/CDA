@@ -57,7 +57,7 @@
 
                 <tbody>
                 {% for mast in all_masts %}
-                    <tr>
+                    <tr id="{{ mast.name }}">
                         <td></td>
                         <td>##:##:##</td>
                         <td>{{ mast.name }}</td>
@@ -73,8 +73,33 @@
     <script>
 
         // Sidebar JS
+        // Menu toggle script
+        $('#menu-toggle').click(function (e) {
+            e.preventDefault();
+            if ($("#wrapper").hasClass('menuDisplayed')) {
+                $("#wrapper").removeClass('menuDisplayed');
+                $('#sidebar-table').fadeToggle();
+            }
+            else {
+                $("#wrapper").addClass('menuDisplayed');
+                $('#sidebar-table').fadeToggle();
+            }
+        });
+
         $(document).ready(function () {
 
+            // Configure BaseMap
+            var map = L.map('mapid').setView([33.885, 35.5061], 14);
+
+            // Load the mapTiles from mapbox
+            L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+                attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
+                '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+                'Imagery © <a href="http://mapbox.com">Mapbox</a>',
+                maxZoom: 18,
+                id: 'mannerisms.pigb1922',
+                accessToken: 'pk.eyJ1IjoibWFubmVyaXNtcyIsImEiOiJjaW1obnE4azUwMDBtdnZtMnFicHVwN3lpIn0.e0CXD69_JWWW-pkNfG62Dg'
+            }).addTo(map);
 
             var table = $('#sidebar-table').DataTable({
                 "bPaginate": false,
@@ -84,94 +109,88 @@
                 "bScrollCollapse": true
             });
 
+            // Create List of all mast features
+            var cellMastLayer = [
+                {% for mast in all_masts %}
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "name": "{{ mast.name }}",
+                            "amenity": "Cell mast",
+                            "popupContent": "<b>{{ mast.name }}</b>",
+                            "show_on_map": true
+                        },
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [{{ mast.long }}, {{ mast.lat }}]
+                        }
+                    },
+                {% endfor %}
+            ];
+
+            // Set options for points
+            var geojsonMarkerOptions = {
+                radius: 6,
+                fillColor: "#000000",
+                color: "#000",
+                weight: 0,
+                opacity: 1,
+                fillOpacity: 0.8
+            };
+
+            // Function enabling popups for features
+            function onEachFeature(feature, layer) {
+                // does this feature have a property named popupContent?
+                if (feature.properties && feature.properties.popupContent) {
+                    layer.bindPopup(feature.properties.popupContent);
+                }
+            }
+
+
+            // Setup Points and add to map
+            function resetMap() {
+
+                L.geoJson(cellMastLayer, {
+
+                    // Add popups to features
+                    onEachFeature: onEachFeature,
+
+                    // Filter masts for show on map
+                    filter: function (feature, cellMastLayer) {
+                        return feature.properties.show_on_map;
+                    },
+
+                    // Add styling to poings
+                    pointToLayer: function (feature, latlng) {
+                        return L.circleMarker(latlng, geojsonMarkerOptions);
+                    }
+                }).addTo(map);
+                };
+
+            function toggleMast() {
+                for (var i = 0; i < cellMastLayer.length; i++) {
+                    if (cellMastLayer[i].properties['show_on_map']) {
+                        cellMastLayer[i].properties['show_on_map'] = false;
+                        console.log(cellMastLayer[i].properties['show_on_map']);
+                    }
+                    else
+                        cellMastLayer[i].properties['show_on_map'] = true;
+                        console.log(cellMastLayer[i].properties['show_on_map']);
+                    }
+                resetMap();
+            };
+
+
             $('#sidebar-table tbody').on('click', 'tr', function () {
                 $(this).toggleClass('selected');
+                var id = table.row( this ).id();
+                toggleMast()
+                resetMap();
             });
 
-
-            // Menu toggle script
-            $('#menu-toggle').click(function (e) {
-                e.preventDefault();
-                if ($("#wrapper").hasClass('menuDisplayed')) {
-                    $("#wrapper").removeClass('menuDisplayed');
-                    $('#sidebar-table').fadeToggle();
-                }
-                else {
-                    $("#wrapper").addClass('menuDisplayed');
-                    $('#sidebar-table').fadeToggle();
-                }
-            });
+            resetMap();
 
         });
-
-        // Configure BaseMap
-        var map = L.map('mapid').setView([33.885, 35.5061], 14);
-
-        // Load the mapTiles from mapbox
-        L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
-            attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
-            '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-            'Imagery © <a href="http://mapbox.com">Mapbox</a>',
-            maxZoom: 18,
-            id: 'mannerisms.pigb1922',
-            accessToken: 'pk.eyJ1IjoibWFubmVyaXNtcyIsImEiOiJjaW1obnE4azUwMDBtdnZtMnFicHVwN3lpIn0.e0CXD69_JWWW-pkNfG62Dg'
-        }).addTo(map);
-
-
-        // Function enabling popups for features
-        function onEachFeature(feature, layer) {
-            // does this feature have a property named popupContent?
-            if (feature.properties && feature.properties.popupContent) {
-                layer.bindPopup(feature.properties.popupContent);
-            }
-        }
-
-        // Create List of all mast features
-        var cellMasts = [
-            {% for mast in all_masts %}
-                {
-                    "type": "Feature",
-                    "properties": {
-                        "name": "{{ mast.name }}",
-                        "amenity": "Cell mast",
-                        "popupContent": "<b>{{ mast.name }}</b>",
-                        "show_on_map": true
-                    },
-                    "geometry": {
-                        "type": "Point",
-                        "coordinates": [{{ mast.long }}, {{ mast.lat }}]
-                    }
-                },
-            {% endfor %}
-        ];
-
-        // Set options for points
-        var geojsonMarkerOptions = {
-            radius: 6,
-            fillColor: "#000000",
-            color: "#000",
-            weight: 0,
-            opacity: 1,
-            fillOpacity: 0.8
-        };
-
-        // Setup Points and add to map
-        L.geoJson(cellMasts, {
-
-            // Add popups to features
-            onEachFeature: onEachFeature,
-
-            // Filter masts for show on map
-            filter: function (feature, layer) {
-                return feature.properties.show_on_map;
-            },
-
-            // Add styling to poings
-            pointToLayer: function (feature, latlng) {
-                return L.circleMarker(latlng, geojsonMarkerOptions)
-            }
-        }).addTo(map);
-
     </script>
 
 {% endblock %}

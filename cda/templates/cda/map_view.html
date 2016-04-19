@@ -88,6 +88,14 @@
 
         $(document).ready(function () {
 
+            var table = $('#sidebar-table').DataTable({
+                "bPaginate": false,
+                "bInfo": false,
+                "bSort": false,
+                "bFilter": false,
+                "bScrollCollapse": true
+            });
+
             // Configure BaseMap
             var map = L.map('mapid').setView([33.885, 35.5061], 14);
 
@@ -101,16 +109,9 @@
                 accessToken: 'pk.eyJ1IjoibWFubmVyaXNtcyIsImEiOiJjaW1obnE4azUwMDBtdnZtMnFicHVwN3lpIn0.e0CXD69_JWWW-pkNfG62Dg'
             }).addTo(map);
 
-            var table = $('#sidebar-table').DataTable({
-                "bPaginate": false,
-                "bInfo": false,
-                "bSort": false,
-                "bFilter": false,
-                "bScrollCollapse": true
-            });
 
             // Create List of all mast features
-            var cellMastLayer = [
+            var cellMastData = [
                 {% for mast in all_masts %}
                     {
                         "type": "Feature",
@@ -118,7 +119,7 @@
                             "name": "{{ mast.name }}",
                             "amenity": "Cell mast",
                             "popupContent": "<b>{{ mast.name }}</b>",
-                            "show_on_map": true
+                            "show_on_map": false
                         },
                         "geometry": {
                             "type": "Point",
@@ -146,49 +147,64 @@
                 }
             }
 
-
             // Setup Points and add to map
-            function resetMap() {
-
-                L.geoJson(cellMastLayer, {
-
+            var cmastdata = L.geoJson(cellMastData, {
                     // Add popups to features
                     onEachFeature: onEachFeature,
 
-                    // Filter masts for show on map
-                    filter: function (feature, cellMastLayer) {
-                        return feature.properties.show_on_map;
-                    },
-
-                    // Add styling to poings
+                    // Add styling to points
                     pointToLayer: function (feature, latlng) {
                         return L.circleMarker(latlng, geojsonMarkerOptions);
+                    },
+
+                    // Filter masts for show on map
+                    filter: function (feature, layer) {
+                        return feature.properties['show_on_map'] === true;
                     }
+
+            }).addTo(map);
+
+
+            var activeMasts = []
+
+            function toggleMast(mast) {
+
+                map.removeLayer(cmastdata);
+
+                for (var i = 0; i < cellMastData.length; i++) {
+                    if (cellMastData[i].properties['name'] === mast) {
+                        if (cellMastData[i].properties['show_on_map']) {
+                            cellMastData[i].properties['show_on_map'] = false;
+                        }
+                        else
+                            cellMastData[i].properties['show_on_map'] = true;
+
+                        }
+                    }
+
+                cmastdata= L.geoJson(cellMastData, {
+                    // Add popups to features
+                    onEachFeature: onEachFeature,
+
+                    // Add styling to points
+                    pointToLayer: function (feature, latlng) {
+                        return L.circleMarker(latlng, geojsonMarkerOptions);
+                    },
+
+                    // Filter masts for show on map
+                    filter: function (feature, layer) {
+                        return feature.properties['show_on_map'];
+                    }
+
                 }).addTo(map);
-                };
 
-            function toggleMast() {
-                for (var i = 0; i < cellMastLayer.length; i++) {
-                    if (cellMastLayer[i].properties['show_on_map']) {
-                        cellMastLayer[i].properties['show_on_map'] = false;
-                        console.log(cellMastLayer[i].properties['show_on_map']);
-                    }
-                    else
-                        cellMastLayer[i].properties['show_on_map'] = true;
-                        console.log(cellMastLayer[i].properties['show_on_map']);
-                    }
-                resetMap();
             };
-
 
             $('#sidebar-table tbody').on('click', 'tr', function () {
                 $(this).toggleClass('selected');
                 var id = table.row( this ).id();
-                toggleMast()
-                resetMap();
+                toggleMast(id);
             });
-
-            resetMap();
 
         });
     </script>
